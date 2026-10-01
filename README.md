@@ -127,3 +127,36 @@ int main() {
 
     return 0;
 }
+---
+
+## 3. Complexity Analysis
+
+| Operation | Time Complexity | Auxiliary Space | Explanation |
+| :--- | :--- | :--- | :--- |
+| **`PUSH(x)`** | $\mathcal{O}(1)$ | $\mathcal{O}(1)$ | Increments `top` pointer and writes directly to array index. |
+| **`POP()`** | $\mathcal{O}(1)$ | $\mathcal{O}(1)$ | Reads index `top` and decrements `top` pointer directly. |
+| **`PEEK()`** | $\mathcal{O}(1)$ | $\mathcal{O}(1)$ | Direct array lookup at index `arr[top]`. |
+| **`DISPLAY()`** | $\mathcal{O}(n)$ | $\mathcal{O}(1)$ | Iterates linearly over current $n$ active elements to display them. |
+
+* **Total Space Complexity**: $\mathcal{O}(N)$, where $N$ (`MAX_CAPACITY`) represents the fixed size of the array allocated in memory.
+
+---
+
+## 4. Theoretical Discussion: Fixed-Size Stack Behavior
+
+### A. Stack Overflow Mechanics
+In an array-based implementation, memory is pre-allocated with a static capacity $N$. A pointer variable `top` tracks the index of the uppermost item.
+
+* **Full Condition**: `top == N - 1`
+* **Triggering Overflow**: Inserting an item when `top == N - 1` attempts to access index $N$, exceeding array bounds.
+
+### B. Consequences of Unchecked Insertions
+If boundary validation (`isFull()`) is omitted in code:
+1. **Out-of-Bounds Memory Write**: Data is written outside allocated array memory bounds.
+2. **Data Corruption**: Overwrites memory locations belonging to other active variables or process metadata.
+3. **Runtime Crashing**: Triggers an operating system memory access violation (**Segmentation Fault / Core Dump**).
+
+### C. Solutions to Fixed-Size Constraints
+To remove hard capacity limits:
+1. **Dynamic Array Rescaling**: Use memory reallocation (`realloc()`) to double array capacity dynamically when full.
+2. **Linked-List-Based Stack**: Allocate stack elements dynamically as node pointers on the heap, allowing growth until available system memory is exhausted.
