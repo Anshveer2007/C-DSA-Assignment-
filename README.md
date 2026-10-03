@@ -1,3 +1,5 @@
+Program no. 1
+
 # Fixed-Size Stack Implementation in C
 
 This repository contains a complete implementation of a **Fixed-Size Stack** data structure using a dynamic/static array in standard C without relying on built-in libraries. It handles edge cases including **Stack Overflow** and **Stack Underflow**, accompanied by space/time complexity analysis and theoretical discussions.
@@ -160,3 +162,163 @@ If boundary validation (`isFull()`) is omitted in code:
 To remove hard capacity limits:
 1. **Dynamic Array Rescaling**: Use memory reallocation (`realloc()`) to double array capacity dynamically when full.
 2. **Linked-List-Based Stack**: Allocate stack elements dynamically as node pointers on the heap, allowing growth until available system memory is exhausted.
+
+Program no. 2
+
+ # Circular Queue Implementation in C
+
+This repository contains a complete implementation of a **Circular Queue** data structure using a fixed-size array in standard C without relying on built-in queue libraries[span_2](start_span)[span_2](end_span). It correctly distinguishes between full and empty queue states and includes performance analysis along with theoretical comparisons to linear queues[span_3](start_span)[span_3](end_span)[span_4](start_span)[span_4](end_span).
+
+---
+
+## 1. Problem Statement
+
+Design and implement a Circular Queue using an array in C that supports the following core operations[span_5](start_span)[span_5](end_span):
+
+* **`ENQUEUE(x)`**: Inserts element `x` at the rear of the queue[span_6](start_span)[span_6](end_span).
+* **`DEQUEUE()`**: Removes and returns the element at the front of the queue[span_7](start_span)[span_7](end_span).
+* **`FRONT()`**: Returns the front element without removing it[span_8](start_span)[span_8](end_span).
+* **`DISPLAY()`**: Outputs all current elements in the queue from front to rear[span_9](start_span)[span_9](end_span).
+
+The implementation must correctly distinguish between a **Full Queue** (`isFull`) and an **Empty Queue** (`isEmpty`)[span_10](start_span)[span_10](end_span).
+
+---
+
+## 2. C Implementation Code
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 5
+
+typedef struct {
+    int arr[MAX_SIZE];
+    int front;
+    int rear;
+} CircularQueue;
+
+// Initialize queue
+void initQueue(CircularQueue *q) {
+    q->front = -1;
+    q->rear = -1;
+}
+
+// Check if queue is full
+bool isFull(CircularQueue *q) {
+    return (q->rear + 1) % MAX_SIZE == q->front;
+}
+
+// Check if queue is empty
+bool isEmpty(CircularQueue *q) {
+    return q->front == -1;
+}
+
+// ENQUEUE operation
+void enqueue(CircularQueue *q, int x) {
+    if (isFull(q)) {
+        printf("[ERROR] Queue Overflow! Cannot insert %d. Queue is full.\n", x);
+        return;
+    }
+    
+    // First element insertion
+    if (isEmpty(q)) {
+        q->front = 0;
+        q->rear = 0;
+    } else {
+        q->rear = (q->rear + 1) % MAX_SIZE;
+    }
+    
+    q->arr[q->rear] = x;
+    printf("[SUCCESS] Enqueued %d into the queue.\n", x);
+}
+
+// DEQUEUE operation
+int dequeue(CircularQueue *q) {
+    if (isEmpty(q)) {
+        printf("[ERROR] Queue Underflow! Cannot dequeue from an empty queue.\n");
+        return -1;
+    }
+    
+    int value = q->arr[q->front];
+    
+    // Reset queue if only one element was left
+    if (q->front == q->rear) {
+        q->front = -1;
+        q->rear = -1;
+    } else {
+        q->front = (q->front + 1) % MAX_SIZE;
+    }
+    
+    printf("[SUCCESS] Dequeued %d from the queue.\n", value);
+    return value;
+}
+
+// FRONT operation
+int getFront(CircularQueue *q) {
+    if (isEmpty(q)) {
+        printf("[ERROR] Queue is empty! No front element.\n");
+        return -1;
+    }
+    return q->arr[q->front];
+}
+
+// DISPLAY operation
+void display(CircularQueue *q) {
+    if (isEmpty(q)) {
+        printf("[INFO] Queue is empty.\n");
+        return;
+    }
+    
+    printf("Current Queue (Front to Rear): ");
+    int i = q->front;
+    while (1) {
+        printf("%d ", q->arr[i]);
+        if (i == q->rear) break;
+        i = (i + 1) % MAX_SIZE;
+    }
+    printf("\n");
+}
+
+int main() {
+    CircularQueue q;
+    initQueue(&q);
+
+    printf("--- Circular Queue Demonstration ---\n\n");
+
+    // 1. Testing Underflow
+    dequeue(&q);
+    getFront(&q);
+    display(&q);
+    printf("\n");
+
+    // 2. Testing Enqueue
+    enqueue(&q, 10);
+    enqueue(&q, 20);
+    enqueue(&q, 30);
+    enqueue(&q, 40);
+    enqueue(&q, 50);
+    display(&q);
+    printf("\n");
+
+    // 3. Testing Overflow
+    enqueue(&q, 60);
+    printf("\n");
+
+    // 4. Testing Dequeue & Circular Wrap-Around
+    dequeue(&q);
+    dequeue(&q);
+    display(&q);
+    printf("\n");
+
+    enqueue(&q, 60);
+    enqueue(&q, 70);
+    display(&q);
+    printf("\n");
+
+    // 5. Testing Front
+    printf("Front Element: %d\n", getFront(&q));
+
+    return 0;
+}
