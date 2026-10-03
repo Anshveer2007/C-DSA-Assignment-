@@ -322,3 +322,18 @@ int main() {
 
     return 0;
 }
+3. Complexity Analysis
+OperationTime ComplexityAuxiliary SpaceExplanation
+ENQUEUE(x)\mathcal{O}(1)\mathcal{O}(1)Updates rear pointer using modulo arithmetic and writes element directly.
+DEQUEUE()\mathcal{O}(1)\mathcal{O}(1)Reads index front and updates front pointer using modulo arithmetic directly.
+FRONT()\mathcal{O}(1)\mathcal{O}(1)Direct array lookup at index arr[front].
+DISPLAY()\mathcal{O}(n)\mathcal{O}(1)Iterates linearly over current n active elements to display them.
+
+4. Theoretical Discussion: Circular vs. Linear Queue Behavior
+A. Memory Utilization Mechanics
+In a linear queue, elements are inserted at rear and deleted from front. As elements are dequeued, vacant space is created at the beginning of the array. However, because rear only moves forward, these empty slots cannot be reused once rear reaches MAX_SIZE - 1.
+A Circular Queue connects the last position back to index 0 using modulo arithmetic ((rear + 1) % MAX_SIZE). This allows newly vacated front positions to be reused seamlessly for new insertions, ensuring 100% memory utilization.
+B. False Overflow Issue in Linear Queues
+When rear reaches the last array index (MAX_SIZE - 1) in a simple linear queue, any subsequent call to ENQUEUE() triggers a Queue Overflow error.
+The Problem: This overflow error occurs even if multiple DEQUEUE() operations have freed up slots at the beginning of the array. This situation is known as False Overflow (or Memory Wastage).
+The Solution: Circular queues eliminate False Overflow by wrapping indices modulo MAX_SIZE, allowing new items to occupy vacant slots at index 0 automatically.
