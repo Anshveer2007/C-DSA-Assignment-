@@ -132,20 +132,24 @@ int main() {
 ---
 
 ## 3. Complexity Analysis
-
-| Operation | Time Complexity | Auxiliary Space | Explanation |
-| :--- | :--- | :--- | :--- |
-| **`PUSH(x)`** | $\mathcal{O}(1)$ | $\mathcal{O}(1)$ | Increments `top` pointer and writes directly to array index. |
-| **`POP()`** | $\mathcal{O}(1)$ | $\mathcal{O}(1)$ | Reads index `top` and decrements `top` pointer directly. |
-| **`PEEK()`** | $\mathcal{O}(1)$ | $\mathcal{O}(1)$ | Direct array lookup at index `arr[top]`. |
-| **`DISPLAY()`** | $\mathcal{O}(n)$ | $\mathcal{O}(1)$ | Iterates linearly over current $n$ active elements to display them. |
-
-* **Total Space Complexity**: $\mathcal{O}(N)$, where $N$ (`MAX_CAPACITY`) represents the fixed size of the array allocated in memory.
+Time Complexity
+PUSH(x): O(1)
+Reason: Pushing an element involves checking if the stack is full, incrementing the top pointer, and assigning the value directly to arr[top]. This takes constant time.
+POP(): O(1)
+Reason: Popping an element involves checking if the stack is empty, reading the value at arr[top], and decrementing the top pointer. This takes constant time.
+PEEK(): O(1)
+Reason: Peeking accesses the top element directly using arr[top] without modifying pointers or traversing the array. This takes constant time.
+DISPLAY(): O(n)
+Reason: Displaying the stack requires a linear traversal from index top down to index 0, where n is the current number of elements in the stack.
+Space Complexity
+Auxiliary Space Complexity: O(1)
+Reason: Each individual operation (push, pop, peek, display) requires no extra memory beyond a few temporary variables.
+Total Space Complexity: O(N)
+Reason: Space is allocated for a fixed-size array of capacity N (where N = MAX_CAPACITY) at the start of execution.
 
 ---
 
 ## 4. Theoretical Discussion: Fixed-Size Stack Behavior
-
 ### A. Stack Overflow Mechanics
 In an array-based implementation, memory is pre-allocated with a static capacity $N$. A pointer variable `top` tracks the index of the uppermost item.
 
@@ -162,6 +166,7 @@ If boundary validation (`isFull()`) is omitted in code:
 To remove hard capacity limits:
 1. **Dynamic Array Rescaling**: Use memory reallocation (`realloc()`) to double array capacity dynamically when full.
 2. **Linked-List-Based Stack**: Allocate stack elements dynamically as node pointers on the heap, allowing growth until available system memory is exhausted.
+
 
 Program no. 2
 
